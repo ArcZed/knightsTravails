@@ -20,8 +20,8 @@ function knightPosMoves ([x,y]) {
     return moves
 }
 
- function knightMoves (s, d, q = [new Node(s)], found = [new Node(s)]) {
-    
+export function knightMoves (s, d, q = [new Node(s)], found = new Set()) {
+
     if (q.length == 0) {
         console.log("no path found! try another destination")
         return 
@@ -39,20 +39,17 @@ function knightPosMoves ([x,y]) {
         return
     }
 
+    if (found.size == 0) found.add(`${s[0]},${s[1]}`)
     //checking children node 
     q[0].edgeList.forEach((edge) => {
-        //o(n)
-        const foundNode = found.some(f => edge[0] === f.data[0] && edge[1] === f.data[1]) 
-
-        if (!foundNode) {
-            let e = new Node(edge, q[0]); 
-            found.push(e)
-            q.push(e)
+        //store the found set as data keys  instead of the nodes 
+        if (!found.has(`${edge}`)) {
+            found.add(`${edge}`)
+            q.push(new Node(edge, q[0]))
         }
     })
-    console.log(q)
+
     q.shift()
-    
     return knightMoves(s, d, q, found)
 }
-knightMoves([0,0], [7,7])
+// knightMoves([0,0], [7,7])
