@@ -1,9 +1,7 @@
 class Node {
-    constructor (data, prev = null, dist = 0) {
-        
+    constructor (data, prev = null) {
         this.data = data;
         this.prev = prev;
-        this.dist = dist;
         this.edgeList = knightPosMoves(data);
     }
 }
@@ -21,11 +19,11 @@ function knightPosMoves ([x,y]) {
 }
 
 export function knightMoves (s, d, q = [new Node(s)], found = new Set()) {
-
-    if (q.length == 0) {
-        console.log("no path found! try another destination")
-        return 
+    if ([s, d].some(([x, y]) => x < 0 || x > 7 || y < 0 || y > 7)) {
+        console.log("Invalid position! The nodes must be between 0 and 7.");
+        return
     }
+
     if (q[0].data[0] == d[0] && q[0].data[1] == d[1]){ 
         let par = q[0];
         let key = "Here's your path: ";
@@ -40,9 +38,8 @@ export function knightMoves (s, d, q = [new Node(s)], found = new Set()) {
     }
 
     if (found.size == 0) found.add(`${s[0]},${s[1]}`)
-    //checking children node 
+
     q[0].edgeList.forEach((edge) => {
-        //store the found set as data keys  instead of the nodes 
         if (!found.has(`${edge}`)) {
             found.add(`${edge}`)
             q.push(new Node(edge, q[0]))
